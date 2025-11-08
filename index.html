@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Python DSA Master – 25 Exercises + Concepts</title>
+  <style>
+    :root{
+      --primary:#243447;
+      --secondary:#1da1f2;
+      --light:#f7f9fc;
+      --dark:#0f1419;
+      --radius:10px;
+      --shadow:0 8px 24px rgba(0,0,0,.08);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Helvetica,Arial,sans-serif;
+      background:#eef2f7;color:#222;line-height:1.6;min-height:100vh;
+    }
+
+    header{position:sticky;top:0;z-index:10;background:var(--primary);color:#fff;box-shadow:var(--shadow)}
+    .nav{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 20px}
+    .brand{font-weight:800;letter-spacing:.3px}
+    .brand span{color:var(--secondary)}
+    .links a{color:#e8eef5;text-decoration:none;margin-left:16px;padding:6px 10px;border-radius:8px}
+    .links a:hover{background:rgba(255,255,255,.12)}
+
+    .wrap{max-width:1100px;margin:22px auto;padding:0 16px}
+
+    .hero{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:28px;text-align:center}
+    .hero h1{color:var(--primary);margin-bottom:6px}
+    .hero p{color:#4b5a6a}
+    .stats{display:flex;gap:16px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+    .stat{background:var(--light);padding:14px 18px;border-radius:12px;min-width:140px}
+    .stat .n{font-size:28px;font-weight:800;color:var(--secondary);line-height:1}
+    .stat .l{font-size:12px;color:#556371}
+
+    .panel{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-top:22px}
+    .panel h2{color:var(--primary);margin-bottom:10px}
+
+    .filters{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 6px}
+    .btn{border:1px solid var(--secondary);background:#fff;color:var(--secondary);padding:8px 14px;border-radius:22px;cursor:pointer;font-weight:600}
+    .btn.active,.btn:hover{background:var(--secondary);color:#fff}
+
+    .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));margin-top:10px}
+    .card{background:var(--light);border:1px solid #e3e8ef;border-radius:12px;padding:14px;cursor:pointer;transition:transform .15s ease, box-shadow .15s ease;min-height:120px}
+    .card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .num{background:var(--primary);color:#fff;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800}
+    .title{font-weight:800;color:var(--primary);flex:1;margin-left:10px}
+    .pill{font-size:12px;font-weight:700;padding:4px 10px;border-radius:20px;color:#fff}
+    .easy{background:#22c55e}
+    .medium{background:#f59e0b}
+    .desc{color:#5b6773;margin-top:8px}
+    .taglist{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+    .tag{background:#e6edf5;color:#3a4c5c;font-size:12px;border-radius:999px;padding:2px 8px}
+
+    /* Modal */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:16px}
+    .modal.open{display:flex}
+    .box{background:#fff;max-width:900px;width:100%;border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+    .boxhd{display:flex;align-items:center;justify-content:space-between;background:#0f172a;color:#fff;padding:14px 16px}
+    .boxhd h3{font-size:16px}
+    .x{background:transparent;border:none;color:#fff;font-size:22px;cursor:pointer;padding:2px 8px}
+    .tabs{display:flex;gap:10px;border-bottom:1px solid #e5e7eb;padding:10px 12px;flex-wrap:wrap}
+    .tbtn{background:transparent;border:none;padding:8px 10px;font-weight:700;color:#4b5563;border-bottom:2px solid transparent;cursor:pointer}
+    .tbtn.active{color:var(--secondary);border-bottom-color:var(--secondary)}
+    .pane{display:none;padding:16px}
+    .pane.active{display:block}
+
+    /* Code blocks */
+    pre{
+      background:#0b1020;color:#e6edf3;border-radius:10px;padding:14px;overflow:auto;
+      font-family:Consolas,Monaco,ui-monospace,Menlo,monospace;font-size:14px;line-height:1.55;max-height:420px
+    }
+    .complex{background:#f4f7fb;border:1px solid #e5e7eb;border-radius:10px;padding:12px;margin-top:8px}
+    .kv{display:flex;justify-content:space-between;margin:6px 0;color:#4b5a6a}
+
+    /* Concepts – simple accordion */
+    .concept{border:1px solid #e4e7ee;border-radius:12px;overflow:hidden;margin-bottom:12px;background:#fff}
+    .chd{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;cursor:pointer;background:#f7f9fd}
+    .chd h3{font-size:16px;color:#1e293b}
+    .chd .badge{font-size:12px;color:#334155;background:#e6edf5;border-radius:999px;padding:2px 8px}
+    .cbody{display:none;padding:12px 14px;border-top:1px solid #eef2f7}
+    .concept.open .cbody{display:block}
+    .concept.open .chd{background:#eef6ff}
+
+    /* Resources list */
+    .rlist{display:grid;gap:10px}
+    .r{background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:10px}
+    .r strong{color:#0f172a}
+
+    footer{color:#6b7280;text-align:center;margin:28px 0 18px}
+    @media (max-width:560px){.num{display:none}.title{margin-left:0}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="nav">
+    <div class="brand">Python<span>DSA</span>Master</div>
+    <div class="links">
+      <a href="#exercises">Exercises</a>
+      <a href="#concepts">Concepts</a>
+      <a href="#resources">Resources</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>Master Data Structures & Algorithms (Python)</h1>
+    <p>25 carefully selected problems with clear, simple Python solutions + teaching concepts explained separately.</p>
+    <div class="stats">
+      <div class="stat"><div class="n">25</div><div class="l">Exercises</div></div>
+      <div class="stat"><div class="n">15</div><div class="l">Easy</div></div>
+      <div class="stat"><div class="n">10</div><div class="l">Medium</div></div>
+    </div>
+  </section>
+
+  <!-- Exercises -->
+  <section id="exercises" class="panel">
+    <h2>25 Python DSA Exercises</h2>
+    <div class="filters">
+      <button class="btn active" onclick="filterExercises(this,'all')">All</button>
+      <button class="btn" onclick="filterExercises(this,'easy')">Easy (15)</button>
+      <button class="btn" onclick="filterExercises(this,'medium')">Medium (10)</button>
+    </div>
+    <div id="grid" class="grid"></div>
+  </section>
+
+  <!-- Concepts -->
+  <section id="concepts" class="panel">
+    <h2>Core Concepts (Teach & Explain)</h2>
+
+    <!-- 1. Arrays & Two Pointers -->
+    <div class="concept">
+      <div class="chd" onclick="toggleConcept(this)">
+        <h3>Arrays & Two Pointers</h3>
+        <span class="badge">Technique</span>
+      </div>
+      <div class="cbody">
+        <p>Use two indices that move towards each other or in the same direction to avoid nested loops.</p>
+        <ul>
+          <li><strong>Opposite ends</strong>: problems like “reverse”, “container with most water”.</li>
+          <li><strong>Same direction</strong>: “move zeroes”, “merge arrays”.</li>
+        </ul>
+        <pre><code>def pair_sum_sorted(nums, target):
+    i, j = 0, len(nums)-1
+    while i &lt; j:
+        s = nums[i] + nums[j]
+        if s == target: return (i, j)
+        if s &lt; target: i += 1
+        else: j -= 1
+    return None</code></pre>
+      </div>
+    </div>
+
+    <!-- 2. Sliding Window -->
+    <div class="concept">
+      <div class="chd" onclick="toggleConcept(this)">
+        <h3>Sliding Window</h3>
+        <span class="badge">Technique</span>
+      </div>
+      <div class="cbody">
+        <p>Maintain a window [l..r] and expand/contract to satisfy constraints. Great for substrings/subarrays.</p>
+        <pre><code>def longest_unique_substring(s):
+    seen, l, best = set(), 0, 0
+    for r, ch in enumerate(s):
+        while ch in seen:
+            seen.remove(s[l]); l += 1
+        seen.add(ch)
+        best = max(best, r-l+1)
+    return best</code></pre>
+      </div>
+    </div>
+
+    <!-- 3. Hash Tables (Dictionaries) -->
+    <div class="concept">
+      <div class="chd" onclick="toggleConcept(this)">
+        <h3>Hash Tables (Dictionaries)</h3>
+        <span class="badge">Data Structure</span>
+      </div>
+      <div class="cbody">
+        <p>O(1) average insert/lookup. Perfect for counting, mapping, and checking complements.</p>
+        <pre><code>from collections import Counter
+
+def is_anagram(s, t):
+    return Counter(s) == Counter(t)</code></pre>
+      </div>
+    </div>
+
+    <!-- 4. Binary Search -->
+    <div class="concept">
+      <div class="chd" onclick="toggleConcept(this)">
+        <h3>Binary Search</h3>
+        <span class="badge">Algorithm</span>
+      </div>
+      <div class="cbody">
+        <p>Search on <em>sorted</em> data or on an <em>answer space</em> (first true/false boundary).</p>
+        <pre><code>def first_true(lo, hi, ok):
+    while lo &lt; hi:
+        mid = (lo + hi)//2
+        if ok(mid): hi = mid
+        else: lo = mid + 1
+    return lo</code></pre>
+      </div>
+    </div>
+
+    <!-- 5. Prefix/Suffix Products & Sums -->
+    <div class="concept">
+      <div class="chd" onclick="toggleConcept(this)">
+        <h3>Prefix / Suffix Tricks</h3>
+        <span class="badge">Pattern</span>
+      </div>
+      <div class="cbody">
+        <p>Precompute left-to-right and right-to-left aggregates to answer queries in O(1) per index.</p>
+        <pre><code>def product_except_self(a):
+    n = len(a); res = [1]*n
+    p = 1
+    for i in range(n):
+        res[i] = p; p *= a[i]
+    p = 1
+    for i in range(n-1, -1, -1):
+        res[i] *= p; p *= a[i]
+    return res</code></pre>
+      </div>
+    </div>
+
+    <!-- 6. Stack & Queue -->
+    <div class="concept">
+      <div class="chd" onclick="toggleConcept(this)">
+        <h3>Stacks & Queues</h3>
+        <span class="badge">Data Structure</span>
+      </div>
+      <div class="cbody">
+        <p>Stacks help with “valid parentheses”, “evaluate RPN”. Queues (and deque) help with BFS and sliding window max.</p>
+        <pre><code>def valid_parentheses(s):
+    stack, pair = [], {')':'(', ']':'[', '}':'{'}
+    for ch in s:
+        if ch in pair:
+            if not stack or stack.pop() != pair[ch]: return False
+        else:
+            stack.append(ch)
+    return not stack</code></pre>
+      </div>
+    </div>
+
+    <!-- 7. Sorting & Deduplication -->
+    <div class="concept">
+      <div class="chd" onclick="toggleConcept(this)">
+        <h3>Sorting & Deduplication</h3>
+        <span class="badge">Technique</span>
+      </div>
+      <div class="cbody">
+        <p>Sort first to make duplicates adjacent and to enable two-pointer patterns.</p>
+        <pre><code>def three_sum(nums):
+    nums.sort(); n=len(nums); out=[]
+    for i in range(n-2):
+        if i and nums[i]==nums[i-1]: continue
+        l, r = i+1, n-1
+        while l&lt;r:
+            s=nums[i]+nums[l]+nums[r]
+            if s&lt;0:l+=1
+            elif s&gt;0:r-=1
+            else:
+                out.append([nums[i],nums[l],nums[r]])
+                l+=1; r-=1
+                while l&lt;r and nums[l]==nums[l-1]: l+=1
+                while l&lt;r and nums[r]==nums[r+1]: r-=1
+    return out</code></pre>
+      </div>
+    </div>
+
+    <!-- 8. Recursion & Backtracking -->
+    <div class="concept">
+      <div class="chd" onclick="toggleConcept(this)">
+        <h3>Recursion & Backtracking</h3>
+        <span class="badge">Algorithm</span>
+      </div>
+      <div class="cbody">
+        <p>Build solutions step-by-step and undo (backtrack) when a choice fails.</p>
+        <pre><code>def combination_sum(cands, target):
+    out=[]
+    def dfs(i, cur, total):
+        if total==target: out.append(cur[:]); return
+        if i==len(cands) or total&gt;target: return
+        cur.append(cands[i]); dfs(i, cur, total+cands[i]); cur.pop()
+        dfs(i+1, cur, total)
+    dfs(0, [], 0)
+    return out</code></pre>
+      </div>
+    </div>
+
+    <!-- 9. Dynamic Programming (DP) -->
+    <div class="concept">
+      <div class="chd" onclick="toggleConcept(this)">
+        <h3>Dynamic Programming (1D)</h3>
+        <span class="badge">Method</span>
+      </div>
+      <div class="cbody">
+        <p>Break problems into overlapping subproblems and reuse computed answers.</p>
+        <pre><code>def climb_stairs(n):
+    if n&lt;=2: return n
+    a, b = 1, 2
+    for _ in range(3, n+1):
+        a, b = b, a+b
+    return b</code></pre>
+      </div>
+    </div>
+
+    <!-- 10. Complexity Analysis -->
+    <div class="concept">
+      <div class="chd" onclick="toggleConcept(this)">
+        <h3>Time & Space Complexity</h3>
+        <span class="badge">Foundation</span>
+      </div>
+      <div class="cbody">
+        <p><strong>Big-O</strong> describes growth as input size increases. Prefer O(n) over O(n²) when possible.</p>
+        <ul>
+          <li>Hash lookups: ~O(1)</li>
+          <li>Binary search: O(log n)</li>
+          <li>Two pointers / sliding window: O(n)</li>
+          <li>Backtracking often exponential</li>
+        </ul>
+        <pre><code># Example: find max in array – O(n) time, O(1) space
+def arr_max(a):
+    m = a[0]
+    for x in a[1:]:
+        if x &gt; m: m = x
+    return m</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Resources -->
+  <section id="resources" class="panel">
+    <h2>Resources & Study Flow</h2>
+    <div class="rlist">
+      <div class="r"><strong>Study order:</strong> Arrays & Two Pointers → Hash Tables → Sliding Window → Binary Search → Prefix/Suffix → Stack/Queue → Sorting Patterns → Recursion/Backtracking → DP → Complexity practice.</div>
+      <div class="r"><strong>Tips:</strong> Write brute-force first, measure, then optimize with a technique. Always state time/space and test edge cases.</div>
+      <div class="r"><strong>Practice plan:</strong> Do 2–3 easy problems per concept, then 1–2 medium that mix two concepts (e.g., sort + two pointers).</div>
+    </div>
+  </section>
+
+  <footer>© 2025 Python DSA Master</footer>
+</main>
+
+<!-- Modal -->
+<div id="modal" class="modal" aria-hidden="true">
+  <div class="box" role="dialog" aria-modal="true">
+    <div class="boxhd">
+      <h3 id="modalTitle">Exercise</h3>
+      <button class="x" aria-label="Close" onclick="closeModal()">×</button>
+    </div>
+    <div class="tabs">
+      <button class="tbtn active" onclick="openTab(this,'problem')">Problem</button>
+      <button class="tbtn" onclick="openTab(this,'solution')">Solution</button>
+      <button class="tbtn" onclick="openTab(this,'explanation')">Explanation</button>
+    </div>
+    <div id="problem" class="pane active"></div>
+    <div id="solution" class="pane"></div>
+    <div id="explanation" class="pane"></div>
+  </div>
+</div>
+
+<script>
+/* -----------------------
+   1) Exercises (same set)
+------------------------*/
+const exercises = [
+  {id:1,title:"Two Sum",difficulty:"easy",description:"Find two numbers that add up to target.",tags:["array","hash table"],
+   problem:"Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.",
+   solution:`def two_sum(nums, target):
+    seen = {}
+    for i, x in enumerate(nums):
+        y = target - x
+        if y in seen:
+            return [seen[y], i]
+        seen[x] = i
+    return []`,
+   explanation:"Use a dictionary to store seen numbers → check if complement exists.",
+   time_complexity:"O(n)", space_complexity:"O(n)"},
+  {id:2,title:"Reverse String",difficulty:"easy",description:"Reverse a string.",tags:["string","two pointers"],
+   problem:"Reverse a string and return the result.",
+   solution:`def reverse_string(s):
+    s = list(s)
+    i, j = 0, len(s) - 1
+    while i < j:
+        s[i], s[j] = s[j], s[i]
+        i += 1; j -= 1
+    return ''.join(s)`,
+   explanation:"Swap characters from both ends.",time_complexity:"O(n)",space_complexity:"O(1)"},
+  {id:3,title:"Valid Parentheses",difficulty:"easy",description:"Check if parentheses are valid.",tags:["stack","string"],
+   problem:"Given ()[]{}-style string, check if it is valid.",
+   solution:`def is_valid(s):
+    stack = []
+    pair = {')':'(', ']':'[', '}':'{'}
+    for ch in s:
+        if ch in pair:
+            if not stack or stack.pop() != pair[ch]:
+                return False
+        else:
+            stack.append(ch)
+    return not stack`,
+   explanation:"Stack stores openings; each close must match the latest open.",time_complexity:"O(n)",space_complexity:"O(n)"},
+  {id:4,title:"Palindrome Check",difficulty:"easy",description:"Alphanumeric palindrome.",tags:["string","two pointers"],
+   problem:"Return True if s is a palindrome ignoring non-alphanumerics and case.",
+   solution:`def is_palindrome(s):
+    t = [c.lower() for c in s if c.isalnum()]
+    i, j = 0, len(t) - 1
+    while i < j:
+        if t[i] != t[j]:
+            return False
+        i += 1; j -= 1
+    return True`,
+   explanation:"Filter, lowercase, two-pointer compare.",time_complexity:"O(n)",space_complexity:"O(n)"},
+  {id:5,title:"Maximum Subarray",difficulty:"easy",description:"Largest sum subarray.",tags:["array","DP"],
+   problem:"Find the contiguous subarray with the largest sum.",
+   solution:`def max_subarray(nums):
+    best = cur = nums[0]
+    for x in nums[1:]:
+        cur = max(x, cur + x)
+        best = max(best, cur)
+    return best`,
+   explanation:"Kadane’s algorithm keeps running best and global best.",time_complexity:"O(n)",space_complexity:"O(1)"},
+  {id:6,title:"Binary Search",difficulty:"easy",description:"Find target in sorted array.",tags:["array","binary search"],
+   problem:"Return index of target in sorted nums; else -1.",
+   solution:`def binary_search(nums, target):
+    l, r = 0, len(nums) - 1
+    while l <= r:
+        m = (l + r) // 2
+        if nums[m] == target: return m
+        if nums[m] < target: l = m + 1
+        else: r = m - 1
+    return -1`,
+   explanation:"Halve the search space by comparing to middle.",time_complexity:"O(log n)",space_complexity:"O(1)"},
+  {id:7,title:"First Bad Version",difficulty:"easy",description:"Find first bad version.",tags:["binary search"],
+   problem:"Given API is_bad_version, find first bad in [1..n].",
+   solution:`def first_bad_version(n):
+    l, r = 1, n
+    while l < r:
+        m = (l + r) // 2
+        if is_bad_version(m):
+            r = m
+        else:
+            l = m + 1
+    return l  # provided API: is_bad_version`,
+   explanation:"Binary search on predicate boundary.",time_complexity:"O(log n)",space_complexity:"O(1)"},
+  {id:8,title:"Climbing Stairs",difficulty:"easy",description:"Ways to climb n stairs.",tags:["DP","math"],
+   problem:"Each step 1 or 2; how many distinct ways to reach n?",
+   solution:`def climb_stairs(n):
+    if n <= 2: return n
+    a, b = 1, 2
+    for _ in range(3, n+1):
+        a, b = b, a + b
+    return b`,
+   explanation:"Fibonacci with two variables.",time_complexity:"O(n)",space_complexity:"O(1)"},
+  {id:9,title:"Linked List Cycle",difficulty:"easy",description:"Detect cycle.",tags:["linked list","two pointers"],
+   problem:"Return True if a linked list has a cycle.",
+   solution:`class ListNode:
+    def __init__(self, x):
+        self.val = x
+        self.next = None
+
+def has_cycle(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+        if slow is fast: return True
+    return False`,
+   explanation:"Floyd’s cycle detection (tortoise–hare).",time_complexity:"O(n)",space_complexity:"O(1)"},
+  {id:10,title:"Merge Sorted Arrays",difficulty:"easy",description:"Merge two sorted arrays.",tags:["array","two pointers"],
+   problem:"Return merged sorted array of nums1 and nums2.",
+   solution:`def merge_sorted_arrays(a, b):
+    i = j = 0; out = []
+    while i < len(a) and j < len(b):
+        if a[i] <= b[j]:
+            out.append(a[i]); i += 1
+        else:
+            out.append(b[j]); j += 1
+    out.extend(a[i:]); out.extend(b[j:])
+    return out`,
+   explanation:"Advance the smaller pointer and collect.",time_complexity:"O(n+m)",space_complexity:"O(n+m)"},
+  {id:11,title:"Valid Anagram",difficulty:"easy",description:"Check anagram.",tags:["string","hash table"],
+   problem:"Return True if s and t are anagrams.",
+   solution:`def is_anagram(s, t):
+    if len(s) != len(t): return False
+    from collections import Counter
+    return Counter(s) == Counter(t)`,
+   explanation:"Compare character counts.",time_complexity:"O(n)",space_complexity:"O(1) for fixed alphabet"},
+  {id:12,title:"Contains Duplicate",difficulty:"easy",description:"Any duplicates?",tags:["array","set"],
+   problem:"Return True if any value appears at least twice.",
+   solution:`def contains_duplicate(nums):
+    seen = set()
+    for x in nums:
+        if x in seen: return True
+        seen.add(x)
+    return False`,
+   explanation:"Use a set to catch repeats.",time_complexity:"O(n)",space_complexity:"O(n)"},
+  {id:13,title:"Move Zeroes",difficulty:"easy",description:"Move 0s to end.",tags:["array","two pointers"],
+   problem:"Move all zeroes to end while keeping order.",
+   solution:`def move_zeroes(nums):
+    pos = 0
+    for i in range(len(nums)):
+        if nums[i] != 0:
+            nums[pos] = nums[i]
+            pos += 1
+    for i in range(pos, len(nums)):
+        nums[i] = 0
+    return nums`,
+   explanation:"Pack non-zeros forward, fill the rest with zeros.",time_complexity:"O(n)",space_complexity:"O(1)"},
+  {id:14,title:"Single Number",difficulty:"easy",description:"Only once.",tags:["array","bit"],
+   problem:"All numbers appear twice except one. Find it.",
+   solution:`def single_number(nums):
+    x = 0
+    for v in nums: x ^= v
+    return x`,
+   explanation:"XOR cancels duplicates.",time_complexity:"O(n)",space_complexity:"O(1)"},
+  {id:15,title:"Reverse Integer",difficulty:"easy",description:"Reverse digits (32-bit).",tags:["math"],
+   problem:"Reverse a 32-bit signed integer; overflow → 0.",
+   solution:`def reverse_integer(x):
+    sign = -1 if x < 0 else 1
+    x *= sign
+    out = 0
+    while x:
+        out = out*10 + x%10
+        x //= 10
+    out *= sign
+    return out if -2**31 <= out <= 2**31-1 else 0`,
+   explanation:"Pop/push digits, check bounds.",time_complexity:"O(log10 n)",space_complexity:"O(1)"},
+  {id:16,title:"Product of Array Except Self",difficulty:"medium",description:"No division.",tags:["array","prefix"],
+   problem:"Return array where res[i] = product of all nums except nums[i].",
+   solution:`def product_except_self(nums):
+    n = len(nums)
+    res = [1]*n
+    p = 1
+    for i in range(n):
+        res[i] = p
+        p *= nums[i]
+    p = 1
+    for i in range(n-1, -1, -1):
+        res[i] *= p
+        p *= nums[i]
+    return res`,
+   explanation:"Left products, then right products in place.",time_complexity:"O(n)",space_complexity:"O(1) extra"},
+  {id:17,title:"3Sum",difficulty:"medium",description:"Triplets sum to zero.",tags:["array","two pointers"],
+   problem:"Return all unique triplets that sum to zero.",
+   solution:`def three_sum(nums):
+    nums.sort()
+    n = len(nums); out = []
+    for i in range(n-2):
+        if i and nums[i] == nums[i-1]: continue
+        l, r = i+1, n-1
+        while l < r:
+            s = nums[i] + nums[l] + nums[r]
+            if s < 0: l += 1
+            elif s > 0: r -= 1
+            else:
+                out.append([nums[i], nums[l], nums[r]])
+                l += 1; r -= 1
+                while l < r and nums[l] == nums[l-1]: l += 1
+                while l < r and nums[r] == nums[r+1]: r -= 1
+    return out`,
+   explanation:"Sort + two pointers; skip duplicates.",time_complexity:"O(n²)",space_complexity:"O(1)"},
+  {id:18,title:"Container With Most Water",difficulty:"medium",description:"Max area.",tags:["array","two pointers"],
+   problem:"Find two lines forming container with max water.",
+   solution:`def max_area(h):
+    l, r = 0, len(h)-1
+    best = 0
+    while l < r:
+        best = max(best, (r-l)*min(h[l],h[r]))
+        if h[l] < h[r]: l += 1
+        else: r -= 1
+    return best`,
+   explanation:"Move the shorter line inward.",time_complexity:"O(n)",space_complexity:"O(1)"},
+  {id:19,title:"Set Matrix Zeroes",difficulty:"medium",description:"Zero rows & cols.",tags:["matrix"],
+   problem:"If an element is 0, set its entire row and column to 0 (in place).",
+   solution:`def set_zeroes(mat):
+    m, n = len(mat), len(mat[0])
+    fr = any(mat[0][j]==0 for j in range(n))
+    fc = any(mat[i][0]==0 for i in range(m))
+    for i in range(1,m):
+        for j in range(1,n):
+            if mat[i][j]==0:
+                mat[i][0]=0; mat[0][j]=0
+    for i in range(1,m):
+        for j in range(1,n):
+            if mat[i][0]==0 or mat[0][j]==0:
+                mat[i][j]=0
+    if fr:
+        for j in range(n): mat[0][j]=0
+    if fc:
+        for i in range(m): mat[i][0]=0
+    return mat`,
+   explanation:"Use first row/col as markers to keep O(1) space.",time_complexity:"O(mn)",space_complexity:"O(1)"},
+  {id:20,title:"Group Anagrams",difficulty:"medium",description:"Group strings that are anagrams.",tags:["string","hash table"],
+   problem:"Group words that are anagrams.",
+   solution:`def group_anagrams(strs):
+    from collections import defaultdict
+    d = defaultdict(list)
+    for s in strs:
+        key = ''.join(sorted(s))
+        d[key].append(s)
+    return list(d.values())`,
+   explanation:"Use sorted string as key.",time_complexity:"O(n·k log k)",space_complexity:"O(n·k)"},
+  {id:21,title:"Longest Substring Without Repeating",difficulty:"medium",description:"Length of longest unique substring.",tags:["string","sliding window"],
+   problem:"Return length of the longest substring without repeated chars.",
+   solution:`def length_of_longest_substring(s):
+    seen = set()
+    l = ans = 0
+    for r, ch in enumerate(s):
+        while ch in seen:
+            seen.remove(s[l]); l += 1
+        seen.add(ch)
+        ans = max(ans, r-l+1)
+    return ans`,
+   explanation:"Sliding window + set.",time_complexity:"O(n)",space_complexity:"O(min(n, Σ))"},
+  {id:22,title:"Longest Palindromic Substring",difficulty:"medium",description:"Find longest palindrome.",tags:["string","expand center"],
+   problem:"Return the longest palindromic substring.",
+   solution:`def longest_palindrome(s):
+    if len(s) < 2: return s
+    def grow(l,r):
+        while l>=0 and r<len(s) and s[l]==s[r]:
+            l-=1; r+=1
+        return s[l+1:r]
+    best = ""
+    for i in range(len(s)):
+        best = max(best, grow(i,i), grow(i,i+1), key=len)
+    return best`,
+   explanation:"Expand around each center.",time_complexity:"O(n²)",space_complexity:"O(1)"},
+  {id:23,title:"Rotate Image",difficulty:"medium",description:"Rotate matrix 90° CW in-place.",tags:["matrix"],
+   problem:"Rotate n×n matrix 90 degrees clockwise.",
+   solution:`def rotate(mat):
+    n = len(mat)
+    for i in range(n):
+        for j in range(i+1,n):
+            mat[i][j], mat[j][i] = mat[j][i], mat[i][j]
+    for i in range(n):
+        mat[i].reverse()
+    return mat`,
+   explanation:"Transpose then reverse rows.",time_complexity:"O(n²)",space_complexity:"O(1)"},
+  {id:24,title:"Search in Rotated Sorted Array",difficulty:"medium",description:"Find target in rotated array.",tags:["array","binary search"],
+   problem:"Return index of target; else -1.",
+   solution:`def search_rotated(nums, target):
+    l, r = 0, len(nums)-1
+    while l <= r:
+        m = (l+r)//2
+        if nums[m]==target: return m
+        if nums[l] <= nums[m]:
+            if nums[l] <= target < nums[m]: r = m-1
+            else: l = m+1
+        else:
+            if nums[m] < target <= nums[r]: l = m+1
+            else: r = m-1
+    return -1`,
+   explanation:"Binary search determining the sorted side.",time_complexity:"O(log n)",space_complexity:"O(1)"},
+  {id:25,title:"Combination Sum",difficulty:"medium",description:"All combos that sum to target.",tags:["backtracking"],
+   problem:"Return unique combinations of candidates summing to target.",
+   solution:`def combination_sum(candidates, target):
+    out = []
+    def dfs(i, cur, total):
+        if total == target:
+            out.append(cur[:]); return
+        if i == len(candidates) or total > target:
+            return
+        cur.append(candidates[i])
+        dfs(i, cur, total + candidates[i])
+        cur.pop()
+        dfs(i+1, cur, total)
+    dfs(0, [], 0)
+    return out`,
+   explanation:"Backtrack using include/exclude choice.",time_complexity:"O(2^n)",space_complexity:"O(n)"}
+];
+
+/* -----------------------
+   2) Render Exercise Cards
+------------------------*/
+function renderGrid(list){
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  list.forEach(e=>{
+    const card = document.createElement('div');
+    card.className = `card ${e.difficulty}`;
+    card.onclick = () => openExercise(e.id);
+    card.innerHTML = `
+      <div class="row">
+        <div class="num">${e.id}</div>
+        <div class="title">${e.title}</div>
+        <div class="pill ${e.difficulty}">${e.difficulty}</div>
+      </div>
+      <div class="desc">${e.description}</div>
+      <div class="taglist">
+        ${e.tags.map(t=>`<span class="tag">${t}</span>`).join('')}
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+/* -----------------------
+   3) Filters
+------------------------*/
+function filterExercises(btn, level){
+  document.querySelectorAll('.filters .btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(level==='all') { renderGrid(exercises); return; }
+  renderGrid(exercises.filter(e=>e.difficulty===level));
+}
+
+/* -----------------------
+   4) Modal + Tabs
+------------------------*/
+function openExercise(id){
+  const e = exercises.find(x=>x.id===id);
+  if(!e) return;
+  document.getElementById('modalTitle').textContent = `Exercise ${e.id}: ${e.title}`;
+  document.getElementById('problem').innerHTML = `
+    <h4>Problem</h4>
+    <p style="margin-top:6px">${e.problem}</p>
+    <div class="taglist" style="margin-top:10px">
+      ${e.tags.map(t=>`<span class="tag">${t}</span>`).join('')}
+    </div>
+  `;
+  document.getElementById('solution').innerHTML = `
+    <h4>Python Solution</h4>
+    <pre><code>${escapeHTML(e.solution)}</code></pre>
+  `;
+  document.getElementById('explanation').innerHTML = `
+    <h4>Explanation</h4>
+    <p style="margin-top:6px">${e.explanation}</p>
+    <div class="complex">
+      <div class="kv"><span>Time Complexity</span><strong>${e.time_complexity}</strong></div>
+      <div class="kv"><span>Space Complexity</span><strong>${e.space_complexity}</strong></div>
+    </div>
+  `;
+  // reset tabs
+  document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+  document.querySelector('.tbtn').classList.add('active');
+  document.getElementById('problem').classList.add('active');
+
+  document.getElementById('modal').classList.add('open');
+  document.getElementById('modal').setAttribute('aria-hidden','false');
+}
+
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+  document.getElementById('modal').setAttribute('aria-hidden','true');
+}
+
+function openTab(btn, id){
+  document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+/* -----------------------
+   5) Concepts helpers
+------------------------*/
+function toggleConcept(headerEl){
+  const box = headerEl.closest('.concept');
+  box.classList.toggle('open');
+}
+
+/* -----------------------
+   6) Helpers
+------------------------*/
+function escapeHTML(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+/* -----------------------
+   7) Init
+------------------------*/
+document.addEventListener('DOMContentLoaded', ()=>{
+  renderGrid(exercises);
+});
+
+// close modal on backdrop click
+document.getElementById('modal').addEventListener('click', (e)=>{
+  if(e.target.id==='modal') closeModal();
+});
+</script>
+</body>
+</html>
